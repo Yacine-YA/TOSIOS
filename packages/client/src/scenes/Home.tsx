@@ -21,6 +21,16 @@ import { Helmet } from 'react-helmet';
 import { RoomAvailable } from 'colyseus.js/lib/Room';
 import qs from 'querystringify';
 import { useAnalytics } from '../hooks';
+import { Script } from 'vm';
+
+import { useMoralis } from "react-moralis";
+import { InjectedConnector } from '@web3-react/injected-connector'
+import { useWeb3React } from "@web3-react/core"
+
+export const injected = new InjectedConnector({
+  supportedChainIds: [1, 3, 4, 5, 42],
+})
+
 
 const MapsList: IListItem[] = Constants.MAPS_NAMES.map((value) => ({
     value,
@@ -37,9 +47,14 @@ const GameModesList: IListItem[] = Constants.GAME_MODES.map((value) => ({
     title: value,
 }));
 
+
+
+
+
 interface IProps extends RouteComponentProps {}
 
 interface IState {
+    ethAdress : string;
     playerName: string;
     hasNameChanged: boolean;
     isNewRoom: boolean;
@@ -58,7 +73,8 @@ export default class Home extends Component<IProps, IState> {
         super(props);
 
         this.state = {
-            playerName: localStorage.getItem('playerName') || '',
+            ethAdress: localStorage.getItem("connectorId") || '',
+            playerName: localStorage.getItem("connectorId")  || '',
             hasNameChanged: false,
             isNewRoom: false,
             roomName: localStorage.getItem('roomName') || '',
@@ -71,6 +87,7 @@ export default class Home extends Component<IProps, IState> {
     }
 
     // BASE
+    
     componentDidMount() {
         try {
             const host = window.document.location.host.replace(/:.*/, '');
@@ -106,8 +123,11 @@ export default class Home extends Component<IProps, IState> {
     };
 
     handleNameSave = () => {
+        const { authenticate, isAuthenticated, isAuthenticating, user, account, logout } = useMoralis();
         const { playerName } = this.state;
         const analytics = useAnalytics();
+
+        
 
         localStorage.setItem('playerName', playerName);
         this.setState({
@@ -183,10 +203,10 @@ export default class Home extends Component<IProps, IState> {
                 }}
             >
                 <Helmet>
-                    <title>{`${Constants.APP_TITLE} - Home`}</title>
+                    <title>Yustura</title>
                     <meta
                         name="description"
-                        content="The Open-Source IO Shooter is an open-source multiplayer game in the browser meant to be hostable, modifiable, and playable by anyone."
+                        content="Yustura"
                     />
                 </Helmet>
 
@@ -199,11 +219,11 @@ export default class Home extends Component<IProps, IState> {
                         maxWidth: '100%',
                     }}
                 >
-                    <img alt="TOSIOS" src={titleImage} />
+                    <img alt="Yustara" src={"https://static1.textcraft.net/data1/7/6/7643654fd4a2c045bf628bf5af1a0cff60ead3b84475617a96dcd3a5b411298ce551e3def2800fc7da39a3ee5e6b4b0d3255bfef95601890afd807095c7053c5f07c89e66d823eab3eb9729c.png"} />
+
                     <Space size="xs" />
                     <Text style={{ color: 'white', fontSize: 13 }}>
-                        An open-source multiplayer game in the browser meant to be hostable, modifiable, and playable by
-                        anyone.
+                       The first Online web3 Game
                     </Text>
                     <Space size="xxs" />
                 </View>
@@ -213,13 +233,13 @@ export default class Home extends Component<IProps, IState> {
                 <Space size="m" />
                 {this.renderRoom()}
                 <Space size="m" />
-                <GitHub />
             </View>
         );
     }
 
     renderName = () => {
         return (
+            
             <Box
                 style={{
                     width: 500,
@@ -229,21 +249,20 @@ export default class Home extends Component<IProps, IState> {
                 <View flex>
                     <img src={playerImage} alt="player" width={30} />
                     <Inline size="thin" />
-                    <Text>Pick your name:</Text>
+                    <Text>Put your ETH address or a nickname</Text>
                 </View>
-                <Space size="xs" />
                 <Input
-                    value={this.state.playerName}
-                    placeholder="Name"
+                    value={localStorage.getItem("connectorId") }
+                    placeholder="Address"
                     maxLength={Constants.PLAYER_NAME_MAX}
                     onChange={this.handlePlayerNameChange}
+
                 />
-                {this.state.hasNameChanged && (
                     <>
                         <Space size="xs" />
                         <Button title="Save" text="Save" onClick={this.handleNameSave} />
                     </>
-                )}
+            
             </Box>
         );
     };
@@ -288,7 +307,7 @@ export default class Home extends Component<IProps, IState> {
                 {isNewRoom && (
                     <View style={{ width: '100%' }}>
                         {/* Name */}
-                        <Text>Name:</Text>
+                        <Text>Yustura:</Text>
                         <Space size="xxs" />
                         <Input
                             placeholder="Name"

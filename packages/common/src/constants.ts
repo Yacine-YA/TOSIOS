@@ -1,4 +1,4 @@
-export const APP_TITLE = 'TOSIOS';
+export const APP_TITLE = 'Yustura';
 
 // General
 export const WS_PORT = 3001;

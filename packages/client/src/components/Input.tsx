@@ -28,6 +28,7 @@ export const Input = React.forwardRef(
 
         return (
             <input
+                placeholder={placeholder}
                 ref={ref}
                 type="text"
                 value={value}
@@ -36,7 +37,6 @@ export const Input = React.forwardRef(
                     ...style,
                 }}
                 maxLength={maxLength}
-                placeholder={placeholder}
                 onChange={onChange}
             />
         );
